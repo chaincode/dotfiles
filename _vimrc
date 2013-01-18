@@ -154,6 +154,14 @@ set matchpairs+=<:>         " show matching <> (html mainly) as well
 set foldmethod=indent       " allow us to fold on indents
 set foldlevel=99            " don't fold by default
 
+" editor settings
+autocmd BufReadPost *
+    \ if ! exists("g:leave_my_cursor_position_alone") |
+    \   if line("'\") > 0 && line ("'\") <= line("$") |
+    \       exe "normal g'\"" |
+    \   endif |
+    \ endif
+
 " don't outdent hashes
 inoremap # #
 
@@ -178,8 +186,7 @@ set report=0                " : commands always print changed line count.
 set shortmess+=a            " Use [+]/[RO]/[w] for modified/readonly/written.
 set ruler                   " Show some info, even without statuslines.
 set laststatus=2            " Always show statusline, even if only 1 window.
-set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})
-"""\ %{fugitive#statusline()}
+set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
 
 " displays tabs with :set list & displays when a line runs off-screen
 set listchars=tab:>-,trail:-,precedes:<,extends:>
