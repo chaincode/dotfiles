@@ -95,9 +95,11 @@ map <leader>r :RopeRename<CR>
 " ==========================================================
 " Basic Settings
 " ==========================================================
+syntax enable                 " enable syntax hightlight and completion
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
+set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
 set number                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
 set background=dark           " We are using dark background in vim
@@ -201,6 +203,11 @@ if has("gui_running")
 else
     colorscheme torte
 endif
+
+" hightlight current line
+au WinLeave * set nocursorline nocursorcolumn
+au WinEnter * set cursorline cursorcolumn
+set cursorline cursorcolumn
 
 " Paste from clipboard
 map <leader>p "+p
