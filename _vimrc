@@ -68,8 +68,11 @@ map <c-h> <c-w>h
 "  happen as if in command mode )
 imap <C-W> <C-O><C-W>
 
-" Open NerdTree
+" Toggle NerdTree
 map <leader>n :NERDTreeToggle<CR>
+
+" Toggle tagbar
+map <Leader>t :TagbarToggle<CR>
 
 " Run command-t file search
 map <leader>f :CommandT<CR>
@@ -106,7 +109,9 @@ set background=dark           " We are using dark background in vim
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
-
+set nofoldenable              " disable folding "
+set history=999
+set mouse=a                   "use mouse in all modes"
 
 " don't bell or blink
 set noerrorbells
@@ -139,7 +144,7 @@ set ruler                   " show the cursor position all the time
 set nostartofline           " Avoid moving cursor to BOL when jumping around
 set virtualedit=block       " Let cursor move past the last char in <C-v> mode
 set scrolloff=3             " Keep 3 context lines above and below the cursor
-set backspace=2             " Allow backspacing over autoindent, EOL, and BOL
+set backspace=indent,eol,start " 2          Allow backspacing over autoindent, EOL, and BOL
 set showmatch               " Briefly jump to a paren once it's balanced
 set nowrap                  " don't wrap text
 set linebreak               " don't wrap textin the middle of a word
@@ -155,12 +160,12 @@ set foldmethod=indent       " allow us to fold on indents
 set foldlevel=99            " don't fold by default
 
 " editor settings
-autocmd BufReadPost *
-    \ if ! exists("g:leave_my_cursor_position_alone") |
-    \   if line("'\") > 0 && line ("'\") <= line("$") |
-    \       exe "normal g'\"" |
-    \   endif |
-    \ endif
+"autocmd BufReadPost *
+"    \ if ! exists("g:leave_my_cursor_position_alone") |
+"    \   if line("'\") > 0 && line ("'\") <= line("$") |
+"    \       exe "normal g'\"" |
+"    \   endif |
+"    \ endif
 
 " don't outdent hashes
 inoremap # #
@@ -186,7 +191,9 @@ set report=0                " : commands always print changed line count.
 set shortmess+=a            " Use [+]/[RO]/[w] for modified/readonly/written.
 set ruler                   " Show some info, even without statuslines.
 set laststatus=2            " Always show statusline, even if only 1 window.
-set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
+"set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
+set statusline=%f<%F%h%m%r%h%w%y\ %{&ff}\ %{strftime(\"%Y/%m/%d-%H:%M\")}%=\ CWD:\%r%{getcwd()}%h\ \ Line:%l\ \ %P
+
 
 " displays tabs with :set list & displays when a line runs off-screen
 set listchars=tab:>-,trail:-,precedes:<,extends:>
@@ -210,6 +217,8 @@ if has("gui_running")
 else
     colorscheme torte
 endif
+set t_Co=256
+
 
 " hightlight current line
 au WinLeave * set nocursorline nocursorcolumn
@@ -252,7 +261,7 @@ autocmd FileType html,xhtml,xml,css setlocal expandtab shiftwidth=2 tabstop=2 so
 " Python
 "au BufRead *.py compiler nose
 au FileType python set omnifunc=pythoncomplete#Complete
-au FileType python setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+au FileType python setlocal expandtab shiftwidth=2 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 au FileType coffee setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 au BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 " Don't let pyflakes use the quickfix window
@@ -277,3 +286,55 @@ endif
 " Load up virtualenv's vimrc if it exists
 "if filereadable($VIRTUAL_ENV . '/.vimrc')
 "endif:t colorcolumn=79
+
+
+" ===========================================================
+" Plugin Settings
+" ============================================================
+"
+"" Tagbar
+let g:tagbar_left=1
+let g:tagbar_width=30
+let g:tagbar_autofocus=1
+let g:tagbar_sort=0
+let g:tagbar_compact=1
+
+"" NerdTree
+let NERDChristmasTree=0
+let NERDTreeWinSize=30
+let NERDTreeChDirMode=2
+"let NERDTreeIgnore=['\.vim$', '/~$', '\.pyc$', '.swp$']
+"let NERDTreeSortOrders=['^__\.py$' ,'\/$', '*', '\.swp$', '\~$']
+let NERDTreeShowBookmarks=1
+let NERDTreeWinPos="right"
+
+"" NeoComplCache
+let g:neocomplcache_enable_at_startup=1
+let g:neocomplcache_disableautocomplete=1
+"let g:neocomplcache_enable_underbar_completion=1
+"let g:neocomplcache_enable_camel_case_completion=1
+let g:neocomplcache_enable_smart_case=1
+let g:neocomplcache_min_syntax_length=3
+"let g:neocomplcache_lock_buffer_name_pattern='\*ku\*'
+set completeopt-=preview
+
+imap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+imap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+smap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+
+"" omni completion
+autocmd Filetype css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd Filetype html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd Filetype javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd Filetype python setlocal omnifunc=pythoncomplete#Complete
+autocmd Filetype c setlocal omnifunc=ccomplete#Complete
+
+"" SuperTab
+let g:SuperTabDefaultCompletionType='<C-X><C-U>'
+let g:SuperTabRetainCompletionType=2
+
+"" ctrlp
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.DS_Store
+let g:ctrlp_custom_ignore='\.git$|\.hg$\|\.svn$'
+
