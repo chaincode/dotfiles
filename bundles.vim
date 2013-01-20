@@ -49,6 +49,7 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Lokaltog/powerline'
 Bundle 'scrooloose/syntastic'
+Bundle 'klen/rope-vim'
 
 "-------------
 " Other Utils
@@ -64,6 +65,7 @@ Bundle 'scrooloose/syntastic'
 " Bundle 'tpope/vim-rails'
 " Bundle 'beyondwords/vim-jinja2'
 " Bundle 'digitaltoad/vim-jade'
+Bundle 'pep8'
 
 " web front end
 Bundle 'othree/html5.vim'

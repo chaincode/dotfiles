@@ -76,6 +76,7 @@ map <Leader>t :TagbarToggle<CR>
 
 " Run command-t file search
 map <leader>f :CommandT<CR>
+
 " Ack searching
 nmap <leader>a <Esc>:Ack!
 
@@ -101,6 +102,7 @@ map <leader>r :RopeRename<CR>
 syntax enable                 " enable syntax hightlight and completion
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
+filetype plugin on
 filetype plugin indent on     " enable loading indent file for filetype
 set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
 set number                    " Display line numbers
@@ -109,18 +111,20 @@ set background=dark           " We are using dark background in vim
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
-set nofoldenable              " disable folding "
 set history=999
 set mouse=a                   "use mouse in all modes"
 
-" don't bell or blink
+" No annoying sound on errors
 set noerrorbells
+set novisualbell
 set vb t_vb=
+set tm=500
 
 " Ignore these files when completing
 set wildignore+=*.o,*.obj,.git,*.pyc
 set wildignore+=eggs/**
 set wildignore+=*.egg-info/**
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.DS_Store
 
 set grepprg=ack         " replace the default grep program with ack
 
@@ -156,16 +160,16 @@ set softtabstop=4           " <BS> over an autoindent deletes both spaces.
 set expandtab               " Use spaces, not tabs, for autoindent/tab key.
 set shiftround              " rounds indent to a multiple of shiftwidth
 set matchpairs+=<:>         " show matching <> (html mainly) as well
-set foldmethod=indent       " allow us to fold on indents
-set foldlevel=99            " don't fold by default
 
 " editor settings
-"autocmd BufReadPost *
+autocmd BufReadPost *
 "    \ if ! exists("g:leave_my_cursor_position_alone") |
-"    \   if line("'\") > 0 && line ("'\") <= line("$") |
-"    \       exe "normal g'\"" |
-"    \   endif |
+    \ if line("'\") > 0 && line("'\") <= line("$") |
+    \   exe "normal g'\"" |
+    \   endif
 "    \ endif
+set viminfo^=%              " remember info about open buffers on close"
+set viminfo='20,\50'        " rw a .viminfo file, don't store more than 50 lines"
 
 " don't outdent hashes
 inoremap # #
@@ -194,6 +198,11 @@ set laststatus=2            " Always show statusline, even if only 1 window.
 "set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
 set statusline=%f<%F%h%m%r%h%w%y\ %{&ff}\ %{strftime(\"%Y/%m/%d-%H:%M\")}%=\ CWD:\%r%{getcwd()}%h\ \ Line:%l\ \ %P
 
+" Folding
+set nofoldenable              " disable folding "
+set foldcolumn=3
+set foldmethod=indent        " opt:(manual/indent/expr/syntax/diff/marker)
+set foldlevel=99             " don't fold by default
 
 " displays tabs with :set list & displays when a line runs off-screen
 set listchars=tab:>-,trail:-,precedes:<,extends:>
@@ -260,7 +269,6 @@ autocmd FileType html,xhtml,xml,css setlocal expandtab shiftwidth=2 tabstop=2 so
 
 " Python
 "au BufRead *.py compiler nose
-au FileType python set omnifunc=pythoncomplete#Complete
 au FileType python setlocal expandtab shiftwidth=2 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 au FileType coffee setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 au BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
@@ -335,6 +343,5 @@ let g:SuperTabDefaultCompletionType='<C-X><C-U>'
 let g:SuperTabRetainCompletionType=2
 
 "" ctrlp
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.DS_Store
 let g:ctrlp_custom_ignore='\.git$|\.hg$\|\.svn$'
 
