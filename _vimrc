@@ -217,14 +217,14 @@ set incsearch               " Incrementally search while typing a /regex
 
 """" Display
 if has("gui_running")
-    colorscheme vividchalk  "desert
+    colorscheme Tomorrow-Night-Bright
     " Remove menu bar
     set guioptions-=m
 
     " Remove toolbar
     set guioptions-=T
 else
-    colorscheme torte
+    colorscheme Tomorrow-Night-Bright
 endif
 set t_Co=256
 

@@ -1,10 +1,23 @@
 " git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+function! MyOS()
+    if has("win32")
+        return "windows"
+    else
+        return "linux"
+    endif
+endfunction
+
 
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+if MyOS() == 'linux'
+    set rtp+=~/.vim/bundle/vundle/
+    call vundle#rc()
+elseif MyOS() == 'windows'
+    set rtp+=$VIM/vimfiles/bundle/vundle/
+    call vundle#rc('$VIM/vimfiles/bundle')
+endif
 
 " let Vundle manage Vundle
 Bundle 'gmarik/vundle'
@@ -49,7 +62,6 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Lokaltog/powerline'
 Bundle 'scrooloose/syntastic'
-Bundle 'klen/rope-vim'
 
 "-------------
 " Other Utils
@@ -65,7 +77,6 @@ Bundle 'klen/rope-vim'
 " Bundle 'tpope/vim-rails'
 " Bundle 'beyondwords/vim-jinja2'
 " Bundle 'digitaltoad/vim-jade'
-Bundle 'pep8'
 
 " web front end
 Bundle 'othree/html5.vim'
@@ -95,5 +106,6 @@ Bundle 'rickharris/vim-monokai'
 Bundle 'tpope/vim-vividchalk'
 Bundle 'Lokaltog/vim-distinguished'
 Bundle 'chriskempson/vim-tomorrow-theme'
+Bundle 'daylerees/colour-schemes', { "rtp": "vim-themes/" }
 
 filetype plugin indent on     " required!
