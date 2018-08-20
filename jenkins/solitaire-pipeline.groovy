@@ -36,9 +36,9 @@ stage 'Browser Testing'
 parallel chrome: {
     runTests("Chrome")
 }, firefox: {
-    runTests("Firefox")
+    //runTests("Firefox")
 }, safari: {
-    runTests("Safari")
+    //runTests("Safari")
 }
 
 
@@ -50,6 +50,13 @@ def runTests(browser) {
         step([$class: 'JUnitResultArchiver', testResults: 'test-results/**/test-results.xml'])
     }
 }
+
+input 'Deploy to staging?'
+stage name: 'Deploy', concurrency: 1
+node {
+    bat "echo '<h1>${env.BUILD_DISPLAY_NAME}</h1>' >> app/index.html"
+}
+
 
 
 
